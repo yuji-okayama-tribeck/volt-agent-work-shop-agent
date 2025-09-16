@@ -4,7 +4,7 @@ import { LibSQLMemoryAdapter } from "@voltagent/libsql";
 import { createPinoLogger } from "@voltagent/logger";
 import { openai } from "@ai-sdk/openai";
 import { honoServer } from "@voltagent/server-hono";
-import { getQiitaUserInfo } from "./tools";
+import { getQiitaUserInfo, getQiitaUserItems } from "./tools";
 
 // Create a logger instance
 const logger = createPinoLogger({
@@ -22,9 +22,9 @@ const memory = new Memory({
 
 const qiitaAgent = new Agent({
   name: "qiita-agent",
-  instructions: `ユーザーからQiitaユーザーIDを受け取ったら、ユーザーの情報を取得してください。`,
+  instructions: `ユーザーからQiitaユーザーIDを受け取ったら、Qiitaユーザーの情報と投稿記事一覧を取得してください。`,
   model: openai("gpt-4o-mini"),
-  tools: [getQiitaUserInfo,],
+  tools: [getQiitaUserInfo, getQiitaUserItems],
   memory,
 });
 
