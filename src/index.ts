@@ -4,12 +4,11 @@ import { LibSQLMemoryAdapter } from "@voltagent/libsql";
 import { createPinoLogger } from "@voltagent/logger";
 import { openai } from "@ai-sdk/openai";
 import { honoServer } from "@voltagent/server-hono";
-import { expenseApprovalWorkflow } from "./workflows";
-import { weatherTool } from "./tools";
+import { getQiitaUserInfo } from "./tools";
 
 // Create a logger instance
 const logger = createPinoLogger({
-  name: "agent",
+  name: "qiitaAgent",
   level: "info",
 });
 
@@ -21,20 +20,17 @@ const memory = new Memory({
   }),
 });
 
-const agent = new Agent({
-  name: "agent",
-  instructions: "A helpful assistant that can check weather and help with various tasks",
+const qiitaAgent = new Agent({
+  name: "qiita-agent",
+  instructions: `ユーザーからQiitaユーザーIDを受け取ったら、ユーザーの情報を取得してください。`,
   model: openai("gpt-4o-mini"),
-  tools: [weatherTool],
+  tools: [getQiitaUserInfo,],
   memory,
 });
 
 new VoltAgent({
   agents: {
-    agent,
-  },
-  workflows: {
-    expenseApprovalWorkflow,
+    qiitaAgent,
   },
   server: honoServer(),
   logger,
