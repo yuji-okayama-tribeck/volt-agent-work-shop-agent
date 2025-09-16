@@ -29,12 +29,13 @@ export const getQiitaUserItems = createTool({
   }),
   execute: async ({ userId }) => {
     const accessToken = process.env.QIITA_API_KEY;
-      const response = await fetch(`https://qiita.com/api/v2/users/${userId}/items?per_page=30`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+    const response = await fetch(`https://qiita.com/api/v2/users/${userId}/items?per_page=30`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const data = await response.json();
 
-    return await response.json();
+    return data;
   },
 });

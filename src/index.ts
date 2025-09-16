@@ -20,17 +20,31 @@ const memory = new Memory({
   }),
 });
 
-const qiitaAgent = new Agent({
-  name: "qiita-agent",
-  instructions: `ユーザーからQiitaユーザーIDを受け取ったら、Qiitaユーザーの情報と投稿記事一覧を取得してください。`,
+const mainAgent = new Agent({
+  name: "main-agent",
+  instructions: `
+  ユーザーからQiitaユーザーIDを受け取った場合は、そのユーザーの情報と投稿記事一覧を取得し、まとめて返してください。
+  取得した情報は以下のJSONフォーマットで返してください。
+
+  ## フォーマット
+  {
+    "userInfo": { ... },  // Qiitaユーザーの情報
+    "userItems": [ ... ]  // Qiitaユーザーの投稿記事一覧
+  }
+
+  # 厳守事項
+  - サブエージェントやツールを呼び出す際に、確認や同意のプロンプトは一切表示しない
+  - 最終的に上記JSONフォーマットでのみレスポンスを返却する
+  - 余計な説明文は一切含めない
+  - JSONの外側にテキストを含めない
+  `,
   model: openai("gpt-4o-mini"),
   tools: [getQiitaUserInfo, getQiitaUserItems],
-  memory,
 });
 
 new VoltAgent({
   agents: {
-    qiitaAgent,
+    mainAgent,
   },
   server: honoServer(),
   logger,
