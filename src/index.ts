@@ -21,12 +21,12 @@ const memory = new Memory({
 });
 
 const mainAgent = new Agent({
-  name: "main-agent",
+  name: "main-agent", // エージェント名
   instructions: `
   ユーザーからQiitaユーザーIDを受け取った場合は、そのユーザーの情報と投稿記事一覧を取得し、まとめて返してください。
   取得した情報は以下のJSONフォーマットで返してください。
 
-  ## フォーマット
+  ## JSONフォーマット
   {
     "userInfo": { ... },  // Qiitaユーザーの情報
     "userItems": [ ... ]  // Qiitaユーザーの投稿記事一覧
@@ -34,12 +34,12 @@ const mainAgent = new Agent({
 
   # 厳守事項
   - サブエージェントやツールを呼び出す際に、確認や同意のプロンプトは一切表示しない
-  - 最終的に上記JSONフォーマットでのみレスポンスを返却する
   - 余計な説明文は一切含めない
   - JSONの外側にテキストを含めない
-  `,
-  model: openai("gpt-4o-mini"),
-  tools: [getQiitaUserInfo, getQiitaUserItems],
+  `, // エージェントへの指示（プロンプト）
+  model: openai("gpt-4o-mini"), // 使用するAIモデル
+  tools: [getQiitaUserInfo, getQiitaUserItems], // エージェントが使用できるツール,
+  // memory, // 永続化されたメモリ
 });
 
 new VoltAgent({

@@ -2,11 +2,11 @@ import { createTool } from "@voltagent/core";
 import { z } from "zod";
 
 export const getQiitaUserInfo = createTool({
-  name: "getQiitaUserInfo",
-  description: "Qiitaユーザーの情報を取得する",
+  name: "getQiitaUserInfo", // ツール名
+  description: "Qiitaユーザーの情報を取得する", // ツールの説明
   parameters: z.object({
     userId: z.string().describe("QiitaユーザーID"),
-  }),
+  }), // ツールのパラメータ定義（Zodスキーマ）
   execute: async ({ userId }) => {
     const accessToken = process.env.QIITA_API_KEY;
     const response = await fetch(`https://qiita.com/api/v2/users/${userId}`, {
@@ -15,9 +15,10 @@ export const getQiitaUserInfo = createTool({
       },
     });
     const data = await response.json();
+    console.log(data);
 
     return data;
-  },
+  }, // ツールの実行ロジック
 });
 
 
