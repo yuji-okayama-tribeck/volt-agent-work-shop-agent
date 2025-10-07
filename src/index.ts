@@ -8,7 +8,7 @@ import { getQiitaUserInfo, getQiitaUserItems } from "./tools";
 
 // Create a logger instance
 const logger = createPinoLogger({
-  name: "qiitaAgent",
+  name: "qiita-agent",
   level: "info",
 });
 
@@ -39,7 +39,6 @@ const mainAgent = new Agent({
   `, // エージェントへの指示（プロンプト）
   model: openai("gpt-4o-mini"), // 使用するAIモデル
   tools: [getQiitaUserInfo, getQiitaUserItems], // エージェントが使用できるツール,
-  memory, // 永続化されたメモリ
 });
 
 new VoltAgent({
