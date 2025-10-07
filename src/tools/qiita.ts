@@ -15,7 +15,6 @@ export const getQiitaUserInfo = createTool({
       },
     });
     const data = await response.json();
-    console.log(data);
 
     return data;
   }, // ツールの実行ロジック
